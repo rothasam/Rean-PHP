@@ -1,9 +1,20 @@
-<!DOCTYPE html>
+<?php
+
+
+
+    $students = [
+        ["id" => 1 , "name" => "rotha"],
+        ["id" => 1 , "name" => "rotha"]
+    ];
+    echo json_encode($students);
+?>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 </head>
 <body>
     <form method="POST"id="frm-info">
@@ -22,7 +33,8 @@
         <button type="submit" id="btnSave" >Save</button>
     </form>
 
+    <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/axios.min.js"></script>
     <script src="/assets/js/script.js"></script>
 </body>
-</html>
+</html> -->
