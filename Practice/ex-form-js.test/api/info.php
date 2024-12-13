@@ -14,5 +14,7 @@
     // JSON.stringify(obj) : convert from js object/array to json string
     // JSON.parse(json) : convert from json string to js object/array
 
+    //axios.get(url).than(res)
+    //axios.post(url,data).then(res)
 ?>
 
