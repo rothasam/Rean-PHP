@@ -1,0 +1,5 @@
+{
+  "Laptop": { "price": 999.99, "stock": 10 },
+  "Ipad": { "price": 1200, "stock": 12 },
+  "Phone (Samsung)": { "price": 450, "stock": 6 }
+}

@@ -1,32 +1,52 @@
 <?php
-// get an array of products with their prices and stock quantities
-// from file json
-$file = 'file_name';
+
+$file = './api/products.json';
+$products = json_decode(file_get_contents($file), true);  // return in associative array
 $totalPrice = 0;
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // get the data input
+    $name = htmlspecialchars($_POST['productName']);  // converting special characters (like tag) into plain text 
+    $price = floatval($_POST["price"]);
+    $stock = intval($_POST["stock"]);
 
-    // Add the new product to the array
+    if ($price > 0 && $stock >= 0) {
+         // Add the new product to the array
+        $products[$name] = [
+            "price" => $price,
+            "stock" => $stock,
+        ];
 
-    // post the new product json file
+        // post the new product json file
+        file_put_contents($file, json_encode($products)); 
+    }
 }
 
 // Function to determine stock status
 function getStockStatus($stock)
 {
-    // if stock is bigger than 10 return In Stock
-    // if stock is bigger than 0 return Low Stock
-    // else return Out of Stock
-    return;
+    if($stock > 10){
+        return "In Stock";
+    }elseif($stock > 0){
+        return "Low Stock";
+    }else{
+        return "Out of Stock";
+    }
 }
 
-// Calculate the average price of products
+// Calculate total price of products
 function calculateTotalPrice($products)
-{
-    return;
+{   
+    $total = 0;
+    foreach($products as $product){
+        $total += $product['price'];
+    }
+    return $total;
 }
+
+$totalPrice = calculateTotalPrice($products)
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,16 +116,18 @@ function calculateTotalPrice($products)
                 </thead>
                 <tbody>
                     <!-- Display each product and its details -->
-                     <tr>
-                         <td>Product 1</td>
-                         <td>$99.99</td>
-                         <td>100</td>
-                         <td>In Stock</td>
-                     </tr>
+                <?php foreach ($products as $key => $values){ ?>  
+                <tr>
+                    <td><?= htmlspecialchars($key) ?></td>
+                    <td>$<?= number_format($values['price'], 2) ?></td>
+                    <td><?= $values['stock'] ?></td>
+                    <td><?= getStockStatus($values['stock']) ?></td>
+                </tr>
+                <?php } ?>
                 </tbody>
             </table>
             <!-- Display the total price here -->
-            <h5>Total Price: $99.99</h5>
+            <h5>Total Price: <?php echo "$". number_format($totalPrice,2); ?></h5>
         </div>
     </div>
 

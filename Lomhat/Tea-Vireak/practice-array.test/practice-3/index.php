@@ -50,20 +50,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                        foreach ($students as $stu){
-                            echo "<tr>";
-                            echo "<td>".$stu['name']."</td>";
-                            echo "<td>".$stu['score']."</td>";
-                            if($stu['score'] >= $average_score){
-                                echo "<td class='text-success fw-bold'> Passed </td>";
-                            }
-                            else{
-                                echo "<td class='text-danger fw-bold'> Failed </td>";
-                            }
-                            echo "</tr>";
-                        }
-                    ?>
+                    <?php foreach ($students as $stu){ ?>
+                        <tr>
+                            <td><?php echo $stu['name']; ?></td>
+                            <td><?php echo $stu['score']; ?></td>
+                            <?php
+                                echo $stu['score'] > $average_score ? "<td class='text-success fw-bold'> Passed </td>" : "<td class='text-danger fw-bold'> Failed </td>";
+                            ?>
+                        </tr>
+                        
+                    <?php } ?>
                 </tbody>
             </table>
         </div>

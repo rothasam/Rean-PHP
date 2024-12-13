@@ -74,18 +74,19 @@ foreach ($items as $item) {
                     </thead>
                     <tbody>
                         <!-- code here -->
-                            <?php 
-                                foreach($items as $item){
-                                    $total = floatval($item['quantity']) * floatval($item['price']);
-                                    $item['total'] = $total;
-                                    echo "<tr>";
-                                    echo "<td>" . $item['product'] . "</td>";
-                                    echo "<td>" . $item['quantity'] . "</td>";
-                                    echo "<td>$" . number_format($item['price'],2) . "</td>";
-                                    echo "<td>$" . number_format($item['total'],2) . "</td>";
-                                    echo "</tr>";
-                                }
-                            ?>
+                            <?php foreach($items as $item){ 
+                                $total = floatval($item['quantity']) * floatval($item['price']);
+                                $item['total'] = $total;
+                                ?>
+                                    
+                                <tr>
+                                    <td><?= $item['product'] ?></td>
+                                    <td><?= $item['quantity']?></td>
+                                    <td>$<?= number_format($item['price'],2)?></td>
+                                    <td>$<?= number_format($item['total'],2) ?></td>
+                                </tr>
+                                
+                            <?php } ?>
                     </tbody>
                 </table>
             </div>
