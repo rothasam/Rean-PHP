@@ -1,13 +1,21 @@
 <?php
+function get_products($file){
+    $result = [];  // empty array
+    if(file_exists($file)){
+        $result = json_decode(file_get_contents($file), true); // return in associative array
+    }
+    return $result;  // return empty array
+}
 
 $file = './api/products.json';
-$products = json_decode(file_get_contents($file), true);  // return in associative array
+$products = get_products($file);
 $totalPrice = 0;
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // get the data input
-    $name = htmlspecialchars($_POST['productName']);  // converting special characters (like tag) into plain text 
+    $name = htmlspecialchars($_POST['productName']);  // converting special characters (like tag) into plain text. 
+                                                    // prevent user from entering sql command 
     $price = floatval($_POST["price"]);
     $stock = intval($_POST["stock"]);
 
@@ -40,7 +48,7 @@ function calculateTotalPrice($products)
 {   
     $total = 0;
     foreach($products as $product){
-        $total += $product['price'];
+        $total += $product['price'] * $product['stock'];
     }
     return $total;
 }
@@ -119,7 +127,7 @@ $totalPrice = calculateTotalPrice($products)
                 <?php foreach ($products as $key => $values){ ?>  
                 <tr>
                     <td><?= htmlspecialchars($key) ?></td>
-                    <td>$<?= number_format($values['price'], 2) ?></td>
+                    <td><?= number_format($values['price'], 2) ?>$</td>
                     <td><?= $values['stock'] ?></td>
                     <td><?= getStockStatus($values['stock']) ?></td>
                 </tr>
