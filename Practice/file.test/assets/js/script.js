@@ -7,11 +7,11 @@
     frmInfo.onsubmit = (e) => {
         e.preventDefault();
 
-        let frmData = new FormData();
+        let frmData = new FormData(); 
         frmData.append('name', iName.value);
         frmData.append('photo', iPhoto.files[0]);
 
-        axios.post('/api/file.php',frmData)  // won't convert into json
+        axios.post('/api/file.php',frmData)  // won't convert into json , unlike plain JavaScript objects
             .then((res) => {
                 console.log(res);
             });
