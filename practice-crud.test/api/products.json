@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Iphone",
+    "brand": "weee",
+    "price": 5,
+    "stock": 3,
+    "image": "meow.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Laptop",
+    "brand": "qq",
+    "price": 33,
+    "stock": 3,
+    "image": "meta-1024x683.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Tablet",
+    "brand": "qq",
+    "price": 11,
+    "stock": 32,
+    "image": "meow.jpg"
+  }
+]
