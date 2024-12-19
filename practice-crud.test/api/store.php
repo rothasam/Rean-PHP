@@ -1,15 +1,27 @@
 <?php 
 
-    $file = 'products.json';
-    $products = file_exists($file) ? json_decode(file_get_contents($file),true) : [] ;
+    header('Content-Type: application/json');
+
     $id = count($products) + 1;
     $name = strval($_POST['name']);
     $brand = strval($_POST['brand']);
     $price = floatval($_POST['price']);
     $stock = intval($_POST['stock']);
     $image = $_FILES['image'];
+
+    if(!is_dir('../storage')){
+        mkdir('../storage');
+    }
+    if(!is_dir('../storage/data')){
+        mkdir('../storage/data');
+    }
+    if(!is_dir('../storage/photo')){
+        mkdir('../storage/photo');
+    }
     
-    // print_r($image);
+    $file = 'products.json';
+    $products = file_exists($file) ? json_decode(file_get_contents($file),true) : [] ;
+
     
     
 

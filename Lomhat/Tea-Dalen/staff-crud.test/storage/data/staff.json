@@ -1,1 +1,9 @@
-[{"id":1,"name":"ww","position":"ww","salary":22,"photo":"676288a1960e4.jpg"},{"id":2,"name":"rotha","position":"web","salary":400,"photo":"6762943d86657.jpg"},{"id":3,"name":"haha","position":"haha","salary":22,"photo":"6762945864530.png"},{"id":4,"name":"ee","position":"ee","salary":0,"photo":"6762948162403.jpg"},{"id":5,"name":"ff","position":"ff","salary":0,"photo":"67629497b0c59.jpg"},{"id":6,"name":"","position":"","salary":0,"photo":"676295e8aa188.jpg"},{"id":7,"name":"","position":"","salary":0,"photo":"676295f581936.jpg"}]
+[
+  {
+    "id": 1,
+    "name": "Sam Rotha",
+    "position": "ww",
+    "salary": 500,
+    "photo": "6764168cf0ef4.jpg"
+  }
+]

@@ -32,7 +32,24 @@
                     </form>
                 </div>
                 <div class="col-12 col-lg-6 col-xl-8">
-
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Salary</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-staff">
+                            
+                        </tbody>
+                        
+                    </table>
+                    <div class="p-mb-0 mt-4 fw-bold" id="span-total">
+                            Total Salary : 0
+                        </div>
                 </div>
             </div>
         </div>

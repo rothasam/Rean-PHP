@@ -28,7 +28,7 @@ if(!is_dir('../../storage/data')){
 // }
 
 print_r($photo); 
-if($photo['size'] > 1048576){
+if($photo['size'] > (1048576*2)){ // 1048576
     echo json_encode([
         'result'=> false,
         'message' => 'File too large, maximum size is 1MB.'
@@ -36,14 +36,14 @@ if($photo['size'] > 1048576){
     exit(); // stop the script here
 }
 
-$arr = ['image/jped','image/png'];
-if(!in_array($photo['type'],$arr)){
-    echo json_encode([
-        'result'=> false,
-        'message' => 'Only accept JPEG or PNG.'
-    ]);
-    exit(); // stop the script here
-}
+// $arr = ['image/jped','image/png','image/jpg'];
+// if(!in_array($photo['type'],$arr)){
+//     echo json_encode([
+//         'result'=> false,
+//         'message' => 'Only accept JPEG/PNG/JPG.'
+//     ]);
+//     exit(); // stop the script here
+// }
 
 $path = pathinfo($photo['name']);
 $filename = uniqid() . '.' . $path['extension'];
