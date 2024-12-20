@@ -47,8 +47,8 @@
                         </tbody>
                         
                     </table>
-                    <div class="p-mb-0 mt-4 fw-bold" id="span-total">
-                            Total Salary : 0
+                    <div class="p-mb-0 mt-4 fw-bold" >
+                            Total Salary : <span id="span-total">0</span>
                         </div>
                 </div>
             </div>

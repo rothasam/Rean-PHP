@@ -8,7 +8,7 @@
     foreach($staffs as $index => $item){
         if($item['id'] == $selectedId){
             $photoPath = '../../storage/photo/' . $item['photo'];
-            if(file_exists($photoPath)){
+            if($item['id'] && file_exists($photoPath)){
                 unlink($photoPath);
             }
             array_splice($staffs,$index,1);

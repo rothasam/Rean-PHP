@@ -1,10 +1,6 @@
 (() => {
 
-    // document.getElementById()
 
-
-
-    // return
 
     const frmStaff = document.getElementById('frm-staff');
     const iName = document.getElementById('name');
@@ -13,6 +9,8 @@
     const iPhoto = document.getElementById('photo');
     const tblStaff = document.getElementById('tbl-staff');
     const sTotal = document.getElementById('span-total');
+
+    let staffID = 0;
 
     const loadData = () => {
         axios.get('/api/staff/index.php').then(res => {
@@ -24,7 +22,7 @@
                         <td>${staff.id}</td>
                         <td>
                             <div class="d-flex gap-3 align-items-center">
-                                <img src="/storage/photo/${staff.photo}" alt="staff" class="object-fit-cover rounded-circle" style="width: 45px; height: 45px;">
+                                <img src="${staff.photo ? `/storage/photo/${staff.photo}` : `/assets/img/default-pf.jpg`}" alt="staff" class="object-fit-cover rounded-circle" style="width: 45px; height: 45px;">
                                 <p class="mb-0">${staff.name}</p>
                             </div>
                         </td>
@@ -32,7 +30,7 @@
                         <td>${staff.salary.toLocaleString()}$</td>
                         <td>
                             <div class="d-flex gap-3">
-                                <a role="button" class="text-warning btn-edit">Edit</a>
+                                <a data-staff='${JSON.stringify(staff)}' role="button" class="text-warning btn-edit">Edit</a>
                                 <a data-id=${staff.id} role="button" class="text-danger btn-delete">Delete</a>
                             </div>
                         </td>
@@ -53,7 +51,13 @@
 
             document.querySelectorAll('.btn-edit').forEach(btn => {
                 btn.onclick = (e) => {
-                    alert('Edit')
+                    const staffJSON = btn.getAttribute('data-staff');
+                    const staffOBJ = JSON.parse(staffJSON);
+                    // console.log(staff);
+                    staffID = staffOBJ.id;
+                    iName.value = staffOBJ.name;
+                    iPosition.value = staffOBJ.position;
+                    iSalary.value = staffOBJ.salary;
                 }
             })
         })
@@ -71,7 +75,16 @@
         frmData.append('name', iName.value);
         frmData.append('position', iPosition.value);
         frmData.append('salary', iSalary.value);
-        frmData.append('photo', iPhoto.files[0]);
+        // frmData.append('photo', iPhoto.files[0]);
+
+        if(iPhoto.value){
+            frmData.append('photo',iPhoto.files[0]);
+        }
+        if(staffID > 0){
+            frmData.append('id',staffID);
+        }
+
+        if(staffID == 0){
 
         axios.post('/api/staff/store.php', frmData)
             .then(res => {
@@ -84,5 +97,20 @@
                 iName.focus();
                 loadData();
             });
+        }else{
+            // alert('edited');
+            axios.post('/api/staff/update.php', frmData).then(resUpdate => {
+                console.log(resUpdate);
+                if(!resUpdate.data.result){
+                    alert(resUpdate.data.message);
+                    return;
+                }
+                staffID = 0;
+                iName.value = iPosition.value = iSalary.value = iPhoto.value == '';
+                iName.focus();
+                loadData();
+
+            })
+        }
     }
 })()

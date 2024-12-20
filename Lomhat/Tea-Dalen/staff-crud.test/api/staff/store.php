@@ -5,7 +5,12 @@ header('Content-Type: application/json');  // every echo above will print into j
 $name = strval($_POST['name']);
 $position = strval($_POST['position']);
 $salary = floatval($_POST['salary']);
-$photo = $_FILES['photo'];
+
+
+$photo = null;
+if(isset($_FILES['photo'])){
+    $photo = $_FILES['photo'];
+}
 
 if(!is_dir('../../storage')){
     mkdir('../../storage');
@@ -19,22 +24,30 @@ if(!is_dir('../../storage/data')){
     mkdir('../../storage/data');
 }
 
-// if($photo['type'] != 'image/jpeg' && $photo['type'] != 'image/png' && !='application/pdf'){
-//     echo json_encode([
-//         'result'=> false,
-//         'message' => 'Only accept JPEG or PNG format and PDF.'
-//     ]);
-//     exit(); // stop the script here
-// }
+$filename = '';
+if($photo){
+    // print_r($photo); 
+    if($photo['size'] > (1048576*2)){ // 1048576
+        echo json_encode([
+            'result'=> false,
+            'message' => 'File too large, maximum size is 1MB.'
+        ]);
+        exit(); // stop the script here
+    }
+    if($photo['type'] != 'image/jpeg' && $photo['type'] != 'image/png' && $photo['type']!='application/pdf'){
+        echo json_encode([
+            'result'=> false,
+            'message' => 'Only accept JPEG or PNG format and PDF.'
+        ]);
+        exit(); // stop the script here
+    }
 
-// print_r($photo); 
-if($photo['size'] > (1048576*2)){ // 1048576
-    echo json_encode([
-        'result'=> false,
-        'message' => 'File too large, maximum size is 1MB.'
-    ]);
-    exit(); // stop the script here
+    $path = pathinfo($photo['name']);
+    $filename = uniqid() . '.' . $path['extension'];
+    copy($photo['tmp_name'],'../../storage/photo/' . $filename);
+    
 }
+
 
 // $arr = ['image/jped','image/png','image/jpg'];
 // if(!in_array($photo['type'],$arr)){
@@ -45,9 +58,6 @@ if($photo['size'] > (1048576*2)){ // 1048576
 //     exit(); // stop the script here
 // }
 
-$path = pathinfo($photo['name']);
-$filename = uniqid() . '.' . $path['extension'];
-copy($photo['tmp_name'],'../../storage/photo/' . $filename);
 
 $staffs = [];
 $id = 1; // default
@@ -62,7 +72,7 @@ $staffs[] = [
     'name' => $name,
     'position' => $position,
    'salary' => $salary,
-    'photo' => $filename
+    'photo' => $photo ? $filename : null
 ];
 // array_push($staffs, [
 //     'id' => null,
