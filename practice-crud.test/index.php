@@ -70,7 +70,7 @@
                         <th scope="col">Brand</th>
                         <th scope="col">Price</th>
                         <th scope="col">Stock Quantity</th>
-                        <!-- <th scope="col">Action</th> -->
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">

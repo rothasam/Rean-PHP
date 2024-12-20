@@ -27,7 +27,7 @@ if(!is_dir('../../storage/data')){
 //     exit(); // stop the script here
 // }
 
-print_r($photo); 
+// print_r($photo); 
 if($photo['size'] > (1048576*2)){ // 1048576
     echo json_encode([
         'result'=> false,

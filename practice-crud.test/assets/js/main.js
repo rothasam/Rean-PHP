@@ -9,6 +9,31 @@
 
     let tbody = document.getElementById('tbody');
 
+    const fetchData = () => {
+        axios.get('/api/getProducts.php')
+           .then((resFetch) => {
+            
+                tbody.innerHTML = '';
+                console.log(resFetch.data);
+                resFetch.data.forEach((element) => {
+                    // console.log(element.name);
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${element.name}</td>
+                            <td>${element.brand}</td>
+                            <td>${element.price}</td>
+                            <td>${element.stock}</td>
+                            <td>
+                                <button onclick="deleteProduct(${element.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+    }
+
+    fetchData();
+
 
     frmInfo.onsubmit = (e) => {
         e.preventDefault();
@@ -23,31 +48,36 @@
         axios.post('/api/store.php', formData)
            .then((res) => {
                 console.log(res.data);
+                proName.value = brandName.value = price.value = stockQty.value = image.value = '';
+                proName.focus;
+                fetchData();
+                
             });
+
         
     }
 
 
-    axios.get('/api/getProducts.php')
-        .then((res) => {
-            console.log(res.data);
-            array = res.data;
-            array.forEach((element) => {
-                // console.log(element.name);
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${element.name}</td>
-                        <td>${element.brand}</td>
-                        <td>${element.price}</td>
-                        <td>${element.stock}</td>
+    // axios.get('/api/getProducts.php')
+    //     .then((res) => {
+    //         console.log(res.data);
+    //         array = res.data;
+    //         array.forEach((element) => {
+    //             // console.log(element.name);
+    //             tbody.innerHTML += `
+    //                 <tr>
+    //                     <td>${element.name}</td>
+    //                     <td>${element.brand}</td>
+    //                     <td>${element.price}</td>
+    //                     <td>${element.stock}</td>
                         
-                    </tr>
-                `;
+    //                 </tr>
+    //             `;
 
-            });
+    //         });
             
-        });
-{/* <td><img src="${element.image}" alt="${element.name}" width="50"></td> */}
+    //     });
+/* <td><img src="${element.image}" alt="${element.name}" width="50"></td> */
 })();
 
 
