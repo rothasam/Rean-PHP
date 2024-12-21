@@ -1,4 +1,6 @@
 <?php
+
+    header('Content-Type: application/json');
     $selectedId = $_GET['id'];
     $staffs = json_decode(file_get_contents('../../storage/data/staff.json'),true);
 
@@ -8,15 +10,16 @@
     foreach($staffs as $index => $item){
         if($item['id'] == $selectedId){
             $photoPath = '../../storage/photo/' . $item['photo'];
-            if($item['id'] && file_exists($photoPath)){
+            if($item['photo'] && file_exists($photoPath)){
                 unlink($photoPath);
             }
             array_splice($staffs,$index,1);
             // unset($staffs[$index]);
+            break;
         }
     }
     
-    array_values($staffs);
+    // array_values($staffs);
     if(count($staffs) == 0 ){
         unlink('../../storage/data/staff.json');
     }else{

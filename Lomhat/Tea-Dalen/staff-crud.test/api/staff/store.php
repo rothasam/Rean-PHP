@@ -34,7 +34,8 @@ if($photo){
         ]);
         exit(); // stop the script here
     }
-    if($photo['type'] != 'image/jpeg' && $photo['type'] != 'image/png' && $photo['type']!='application/pdf'){
+    // if($photo['type'] != 'image/jpeg' && $photo['type'] != 'image/png' && $photo['type']!='application/pdf'){
+    if (!in_array($photo['type'], ['image/jpeg', 'image/png', 'image/jpg'])){
         echo json_encode([
             'result'=> false,
             'message' => 'Only accept JPEG or PNG format and PDF.'
@@ -79,7 +80,7 @@ $staffs[] = [
 //     'name' => $name,
 //     'position' => $position,
 //    'salary' => $salary,
-//    'photo' => $filename
+//    'photo' => $photo ? $filename : null
 // ]);
 
 file_put_contents('../../storage/data/staff.json',json_encode($staffs));

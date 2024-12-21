@@ -3,8 +3,10 @@ header('Content-Type: application/json');
 
 if(!file_exists('../../storage/data/staff.json')){
     echo json_encode([
-        'result' => false,
-        'message' => 'Staff data not found.'
+        // 'result' => false,
+        // 'message' => 'Staff data not found.'
+        'staffs' => [],
+        'total_salary' => 0
     ]);
     exit();
 }

@@ -24,7 +24,7 @@
                             <td>${element.price}</td>
                             <td>${element.stock}</td>
                             <td>
-                                <button onclick="deleteProduct(${element.id})">Delete</button>
+                                <button onclick="deleteProduct(${element.id})" class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
                     `;

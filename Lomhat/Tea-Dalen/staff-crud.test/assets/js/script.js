@@ -75,7 +75,6 @@
         frmData.append('name', iName.value);
         frmData.append('position', iPosition.value);
         frmData.append('salary', iSalary.value);
-        // frmData.append('photo', iPhoto.files[0]);
 
         if(iPhoto.value){
             frmData.append('photo',iPhoto.files[0]);
@@ -86,17 +85,17 @@
 
         if(staffID == 0){
 
-        axios.post('/api/staff/store.php', frmData)
-            .then(res => {
-                console.log(res);
-                // if(!res.data.result){
-                //     alert(res.data.message);
-                //     return;
-                // }
-                iName.value = iPosition.value = iSalary.value = iPhoto.value = '';
-                iName.focus();
-                loadData();
-            });
+            axios.post('/api/staff/store.php', frmData)
+                .then(res => {
+                    // console.log(res);
+                    if(!res.data.result){
+                        alert(res.data.message);
+                        return;
+                    }
+                    iName.value = iPosition.value = iSalary.value = iPhoto.value = '';
+                    iName.focus();
+                    loadData();
+                });
         }else{
             // alert('edited');
             axios.post('/api/staff/update.php', frmData).then(resUpdate => {

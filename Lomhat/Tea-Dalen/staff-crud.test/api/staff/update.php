@@ -34,7 +34,7 @@ foreach($staffs as $index => $item){
         $staffs[$index]['name'] = $name;
         $staffs[$index]['position'] = $position;
         $staffs[$index]['salary'] = $salary;
-        $staffs[$index]['photo'] = $fileName;
+        // $staffs[$index]['photo'] = $fileName;
         if($photo){
             $photoPath = '../../storage/photo/' . $item['photo'];
             if($item['photo'] && file_exists($photoPath)){
