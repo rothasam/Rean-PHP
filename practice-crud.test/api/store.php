@@ -8,7 +8,13 @@
     $brand = strval($_POST['brand']);
     $price = floatval($_POST['price']);
     $stock = intval($_POST['stock']);
-    $image = $_FILES['image'];
+
+    $image = null;
+    $fileImgName = '';
+
+    if(isset($_FILES['image'])){
+        $image = $_FILES['image'];
+    }
 
     // create directory or folder
     if(!is_dir('../storage')){
@@ -21,22 +27,37 @@
         mkdir('../storage/photo');
     }
 
+    if($image){
+        if($image['size'] > 5 * 1024 * 1024){  // 5MB
+            echo json_encode([
+                'result' => false,
+                'message' => 'File size is too large'
+            ]);
+            exit();
+        }
+        if(!in_array($image['type'], ['image/jpeg', 'image/png', 'image/jpg','image/webp','image/svg'])){
+            echo json_encode([
+                'result'=> false,
+                'message' => 'Wrong type of file.'
+            ]);
+            exit(); 
+        }
+
+        $pathImg = pathinfo($image['name']); 
+        $fileImgName = uniqid(). '.'. $pathImg['extension'];
+        copy($image['tmp_name'], '../storage/photo/' . $fileImgName);
+    }
+    
+
     $pathToProductFile = '../storage/data/products.json';
     $products = [];  // empty array
-    $id = 1;  // default , set to 0 kor ban
+    $id = 1;  // default 
     if(file_exists($pathToProductFile)){
         $products = json_decode(file_get_contents($pathToProductFile),true);  // Without true, it would decode the JSON as a PHP object instead of associative array
         $countId = array_column($products,'id');  // count all id
         $id = max($countId) + 1; // find largest id(the last one)
+
     }
-
-    // $products = file_exists('../storage/data/products.json') ? json_decode(file_get_contents('../storage/data/products.json'),true) : [] ;
-
-    $pathImg = pathinfo($image['name']);  // ?
-    $fileImgName = uniqid(). '.'. $pathImg['extension'];
-    copy($image['tmp_name'], '../storage/photo/' . $fileImgName);
-
-    
 
 // if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newProduct = [
@@ -53,10 +74,11 @@
 // }
 
 
-    // echo json_encode([
-    //     'result' => true,
-    //     'msg' => 'save hz'
-    // ]);
+
+    echo json_encode([
+        'result' => true,
+        'msg' => 'save hz'
+    ]);
 
     
 

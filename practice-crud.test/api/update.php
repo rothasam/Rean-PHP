@@ -2,17 +2,28 @@
 
 header('Content-Type: application/json');
 
-$seletedID = strval($_POST['id']);
+$seletedID = intval($_POST['id']);
 $proName = strval($_POST['name']);
 $brandName = strval($_POST['brand']);
 $price = floatval($_POST['price']);
 $stockQty = intval($_POST['stock']);
 $pathToProductFile = '../storage/data/products.json';
 
+$image = null;
+if(isset($_FILES['image'])){
+    $image = $_POST['image'];
+}
 
 if(!file_exists($pathToProductFile)){
     echo json_encode(['msg' => 'File not found']);
     exit();
+}
+
+$fileImgName ='';
+if($image){
+    $pathImg = pathinfo($image['name']); 
+    $fileImgName = uniqid(). '.'. $pathImg['extension'];
+    copy($image['tmp_name'], '../storage/photo/' . $fileImgName);
 }
 
 $products = json_decode(file_get_contents($pathToProductFile),true);
@@ -23,7 +34,15 @@ foreach ($products as $index => $proItem) {
         $products[$index]['brand'] = $brandName;
         $products[$index]['price'] = $price;
         $products[$index]['stock'] = $stockQty;
-        // break;
+
+        if($image){
+            $oldImagePath = '../storage/photo/' . $proItem['image'];
+            if($proItem['image'] && file_exists($oldImagePath)){
+                unlink($oldImagePath);
+            }
+            $proItem['image'] = $fileImgName;
+        }
+        break; 
     }
 }
 
@@ -33,6 +52,6 @@ file_put_contents($pathToProductFile, json_encode($products));
 //     exit();
 // }
 
-echo json_encode(['msg' => 'Update successful']);
+echo json_encode(['result'=> true,'msg' => 'Update successful']);
 
 
