@@ -14,7 +14,7 @@
 
     const loadData = () => {
         axios.get('/api/staff/index.php').then(res => {
-            // console.log('Res = ',res);
+            console.log('Res = ',res);
             tblStaff.innerHTML = '';
             res.data.staffs.forEach((staff) => {
                 tblStaff.innerHTML += `

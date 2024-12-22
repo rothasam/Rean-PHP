@@ -2,12 +2,24 @@
 
 header('content-type: application/json');
 
-// if(file_exists('../../storage/data/products.json')){
+$pathToProductFile = '../storage/data/products.json';
 
-// }
-$products = file_exists('../storage/data/products.json') ? json_decode(file_get_contents('../storage/data/products.json'),true) : [] ;
+if(!file_exists($pathToProductFile)) {
+    echo json_encode([
+        // 'result' => false,
+        // 'message' => 'Products data not found.'
+        'products' => []
+    ]);
+    exit();
+}
 
+$products = json_decode(file_get_contents($pathToProductFile), true);  // Read JSON file and convert to associative array
 
-echo json_encode($products);
-    // print_r($products);
+// $allPricePerProduct = array_column($products,'price');
+// $totalPrice = array_sum($allPricePerProduct);
+
+echo json_encode([
+    'products' => $products  
+])
+
 ?>

@@ -1,6 +1,7 @@
 <?php 
 
 header('Content-Type: application/json');  // every echo above will print into json
+                                           // By default, PHP sends the response with the Content-Type: text/html header, which is suitable for HTML pages but not for JSON responses. 
 
 $name = strval($_POST['name']);
 $position = strval($_POST['position']);
@@ -63,7 +64,7 @@ if($photo){
 $staffs = [];
 $id = 1; // default
 if(file_exists(('../../storage/data/staff.json'))){
-   $staffs = json_decode(file_get_contents('../../storage/data/staff.json'),true);
+   $staffs = json_decode(file_get_contents('../../storage/data/staff.json'),true);  // Without true, it would decode the JSON as a PHP object instead of associative array
     $ids = array_column($staffs,'id');  // count all id 
     $id = max($ids) + 1; // find largest id
 }
