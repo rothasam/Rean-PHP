@@ -1,5 +1,4 @@
 body {
-    /* background-color: #e9e9e9; */
     background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     /* background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); */
 }
@@ -26,12 +25,22 @@ th, td{
     background-color: transparent!important;
 }
 table{
-    background-color: white!important;
+    background-color: rgba(255, 255, 255, 0.656)!important;
     border-radius: 10px!important;
 }
-
+tbody tr:hover{
+    background-color:rgb(196, 196, 196);
+}
 main{
     min-height: 100vh;
+    position: relative;
+}
+main .bg-img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -100;
+    object-fit: cover;
 }
 .search-box{
     position: relative;
@@ -45,14 +54,15 @@ main{
     border-top-left-radius: 0!important;
     border-bottom-left-radius: 0!important;
     cursor: pointer;
-
-    /* background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); */
+}
+.search-box .form-control:focus ~ button{
+    background-color: #3A6DC4!important;
+}
+.search-box .form-control:focus ~ button i{
+    color: white !important;
 }
 
-tbody tr:hover{
-    background-color: #F2F2F2;
-}
-#previewImg {
+/* #previewImg {
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 2px;
@@ -61,7 +71,7 @@ tbody tr:hover{
     object-fit: cover;
     display: block;
     background-color: red;
-}
+} */
 .form-container{
     height: 100vh;
     position: sticky;
@@ -71,7 +81,26 @@ tbody tr:hover{
     align-items: center;
     flex-direction: column;
 }
-/* button{
-    background-image: linear-gradient(to top, #00c6fb 0%, #005bea 100%);
-    color: white;
-} */
+#btn-submit{
+    /* background-color: #3A6DC4!important; */
+    color: white!important;
+    font-weight: 600!important;
+}
+.proNotFound td div{
+    padding: 80px 0!important
+}
+.proNotFound img{
+    width: 20%;
+    height: auto;
+}
+.proNotFound:hover{
+    background-color: transparent !important;;
+}
+.form-control{
+    outline: 1px solid rgb(98, 98, 98) !important;
+    box-shadow: none!important;
+    border: none!important;
+}
+.form-control:focus{
+    outline: 2px solid #3A6DC4 !important;
+}

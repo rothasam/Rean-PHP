@@ -12,6 +12,7 @@
 
 <body>
     <main>
+        <img src="assets/img/bg.png" alt="" class="bg-img">
         <div class="container-fluid px-5">
             <div class="row gx-5">
 
@@ -42,7 +43,7 @@
                                     <img id="previewImg" src="" alt="Image Preview">
                                 </div> -->
                             </div>
-                            <button type="submit" class="btn btn-primary" id="btn-submit">Add Product</button>
+                            <button type="submit" class="btn w-100" id="btn-submit">Add Product</button>
                         </form>
                     </div>
                 </div>
@@ -50,7 +51,7 @@
                 <h1 class="text-center my-5 fw-bold">Product Inventory Management</h1>
                     <div class="results-table">
                     <div class="d-flex justify-content-between mb-3 align-items-center">
-                        <h5>Product List</h5>
+                        <h5 class="fw-bold">Product List</h5>
                         <form class="search-box" id="frmSearch">
                             <input type="text" class="form-control" id="inputSearch" placeholder="Search by product name">
                             <button type="submit" class="input-group-text">

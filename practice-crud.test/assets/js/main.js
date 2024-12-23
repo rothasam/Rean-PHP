@@ -7,32 +7,32 @@
     const stockQty = document.getElementById('stock');
     const image = document.getElementById('image');
     let tbProduct = document.getElementById('tbody');
-    // const labelName = document.getElementById('labelName');
     const titleAction = document.getElementById('title-action');
     const btnSubmit = document.getElementById('btn-submit');
     const inputSearch = document.getElementById('inputSearch');
     const frmSearch = document.getElementById('frmSearch');
+    btnSubmit.style.backgroundColor = '#3A6DC4';
 
     let productID = 0;
 
-    document.getElementById('image').addEventListener('change', function (event) {
-        const file = event.target.files[0]; // Get the selected file
+    // document.getElementById('image').addEventListener('change', function (event) {
+    //     const file = event.target.files[0]; // Get the selected file
     
-        if (file) {
-            const reader = new FileReader(); // Create a FileReader to read the file
-            reader.onload = function (e) {
-                const previewImg = document.getElementById('previewImg');
-                previewImg.src = e.target.result; // Set the image source to the file's data URL
-                previewImg.style.display = 'block'; // Show the image preview
-            };
-            reader.readAsDataURL(file); // Read the file as a data URL
-        } else {
-            // If no file is selected, hide the preview image
-            const previewImg = document.getElementById('previewImg');
-            previewImg.src = '';
-            // previewImg.style.display = 'none';
-        }
-    });
+    //     if (file) {
+    //         const reader = new FileReader(); // Create a FileReader to read the file
+    //         reader.onload = function (e) {
+    //             const previewImg = document.getElementById('previewImg');
+    //             previewImg.src = e.target.result; // Set the image source to the file's data URL
+    //             previewImg.style.display = 'block'; // Show the image preview
+    //         };
+    //         reader.readAsDataURL(file); // Read the file as a data URL
+    //     } else {
+    //         // If no file is selected, hide the preview image
+    //         const previewImg = document.getElementById('previewImg');
+    //         previewImg.src = '';
+    //         // previewImg.style.display = 'none';
+    //     }
+    // });
     
 
 
@@ -42,11 +42,11 @@
 
                 tbProduct.innerHTML = '';
                 // console.log(resFetch);
-                resFetch.data.products.forEach((pro) => {   // products is the key (back to getProducts.php in line 21)
+                resFetch.data.products.forEach((pro) => {   // products is the key (back to getProducts.php 21)
                     console.log(pro.id);
                     tbProduct.innerHTML += `
                         <tr class="text-center align-middle">
-                            <td>${pro.id}</td>
+                            <td class="fw-semibold">#${pro.id}</td>
                             <td class="d-flex gap-3 align-items-center ps-5">
                                 <div style="width: 85px; height: 60px;">
                                     <img src="storage/photo/${pro.image}" alt="product" class="h-100 w-100 object-fit-cover rounded-1">
@@ -71,6 +71,7 @@
                     btn.addEventListener('click', (e) => {
                         titleAction.innerHTML = 'Edit Product';
                         btnSubmit.innerHTML = 'Save Update';
+                        btnSubmit.style.backgroundColor = '#FFC107';
                         const productJSON = btn.getAttribute('data-id-edit');   
                         // console.log(productJSON);
                         const productOBJ = JSON.parse(productJSON);   
@@ -135,6 +136,7 @@
                 // console.log(resUpdate);
                 titleAction.innerHTML = 'Add New Product';
                 btnSubmit.innerHTML = 'Add Product';
+                btnSubmit.style.backgroundColor = '#3A6DC4';
                 productID = 0;
                 proName.value = brandName.value = price.value = stockQty.value = image.value = '';
                 proName.focus();
@@ -149,14 +151,56 @@
 
     frmSearch.onsubmit = (e) => {
         e.preventDefault();
+    
+        let formData = new FormData();
+        formData.append('search', inputSearch.value);
+    
+        axios.post('/api/search.php', formData)
+            .then((resSearch) => {
+                const results = resSearch.data.products;
+                tbProduct.innerHTML = ''; // Clear the table body
+    
+                if (results.length > 0) {
+                    results.forEach((product) => {
+                        tbProduct.innerHTML += `
+                            <tr class="text-center align-middle">
+                                <td class="fw-semibold">#${product.id}</td>
+                                <td class="d-flex gap-3 align-items-center ps-5">
+                                    <div style="width: 85px; height: 60px;">
+                                        <img src="storage/photo/${product.image}" alt="product" class="h-100 w-100 object-fit-cover rounded-1">
+                                    </div>
+                                    <p class="mb-0">${product.name}</p>
+                                </td>
+                                <td>${product.brand}</td>
+                                <td>$${product.price}</td>
+                                <td>${product.stock}</td>
+                                <td>
+                                    <button data-id-edit='${JSON.stringify(product)}' class="btn btn-warning btn-edit"><i class="fa-solid fa-pencil"></i></button>
+                                    <button data-id-delete='${product.id}' class="btn btn-danger btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbProduct.innerHTML = `
+                    <tr class="proNotFound">
+                    	<td colspan="6" class="text-center">
+                        <div>
+                            <img src="assets/img/no-data.png" alt="Not Found" >
+                            <h4 class="py-4">Product Not Found!!!</h4>
+                        </div>
+    
+                        </td>
+                    </tr>`;
+                }
+            })
+            .catch((error) => {
+                console.error('Search failed:', error);
+                tbProduct.innerHTML = '<tr><td colspan="6" class="text-center">Search failed. Please try again.</td></tr>';
+            });
+    };
 
-        let frmData = new FormData();
-        frmData.append('search', inputSearch.value);
-        axios.post('/api/search.php', frmData)
-        .then((resSearch) => {
-            console.log(resSearch);
-        })
-    }
+    
 
 
     // const row = document.getElementsByTagName('tr');
@@ -171,10 +215,6 @@
     //     })    
     // });
 
-
-
-
-    
 
 })();
 
