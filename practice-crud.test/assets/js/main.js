@@ -14,14 +14,30 @@
     btnSubmit.style.backgroundColor = '#3A6DC4';
 
     let productID = 0;
+
+
+    document.getElementById('clearData').onclick = () => {
+        proName.value = '';
+        brandName.value = '';
+        price.value = '';
+        stockQty.value = '';
+        image.value = '';
+        productID = 0;
+        titleAction.innerHTML = 'Add New Product';
+        btnSubmit.innerHTML = 'Add Product';
+        btnSubmit.style.backgroundColor = '#3A6DC4';
+    }
+
     
     const showToast = (message,classColor) => {
         const toastMsg = document.getElementById('toastBody');
         const toastLive = document.getElementById('liveToast')
         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive);
         toastMsg.innerHTML = message;
+
+        toastLive.classList.remove('bg-success', 'bg-danger');
         toastLive.classList.add(classColor);
-        toastBootstrap.show()
+        toastBootstrap.show();
     }
 
 
@@ -38,7 +54,7 @@
                             <td class="fw-semibold">#${pro.id}</td>
                             <td class="d-flex gap-3 align-items-center ps-5">
                                 <div style="width: 85px; height: 60px;">
-                                    <img src="storage/photo/${pro.image}" alt="product" class="h-100 w-100 object-fit-cover rounded-1">
+                                    <img src="${pro.image ? `storage/photo/${pro.image}` : `/assets/img/default-img.jpg`}" alt="product" class="h-100 w-100 object-fit-cover rounded-1">
                                 </div>
                                 <p class="mb-0">${pro.name}</p>
                             </td>
@@ -48,12 +64,13 @@
                             <td>
                 
                                 <button data-id-edit='${JSON.stringify(pro)}' class="btn btn-warning btn-edit"><i class="fa-solid fa-pencil"></i></button>
-                                <button data-id-delete='${pro.id}' class="btn btn-danger btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+                                <button data-id-delete='${pro.id}' class="btn btn-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
                     `;
                 })
                 // <button data-id-view='${pro.id}' class="btn btn-success btn-view"><i class="fa-solid fa-eye"></i></button>
+                tbProduct.innerHTML += `<tr id="showPrice"><td colspan="6">Total Price : $${resFetch.data.total_price.toLocaleString()}</td></tr>`;
 
                 document.querySelectorAll('.btn-edit').forEach(btn => {
                     btn.addEventListener('click', (e) => {
@@ -68,20 +85,35 @@
                         brandName.value = productOBJ.brand;
                         price.value = productOBJ.price;
                         stockQty.value = productOBJ.stock;
+
                         fetchData();
+
                     })
                 })
 
                 document.querySelectorAll('.btn-delete').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const seletedID = btn.getAttribute('data-id-delete');
-                        // console.log(seletedID);
-                        axios.get(`/api/destroy.php?id=${seletedID}`)
-                        .then( redDelete =>{
-                            // console.log(redDelete);
-                            showToast('Delete Product Successful','bg-danger');
-                            fetchData();
-                        })
+                        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                        const modalBackdrop = document.querySelector('.modal-backdrop');
+                        deleteModal.show();
+                        document.getElementById('confirmDelete').onclick = () => {
+                            axios.get(`/api/destroy.php?id=${seletedID}`)
+                            .then( redDelete =>{
+                                // console.log(redDelete);
+                                deleteModal.hide();
+                                if (modalBackdrop) {
+                                    modalBackdrop.remove();
+                                }
+                                showToast('Delete Product Successful','bg-danger');
+                                fetchData();
+                                
+                            })
+                        }
+                        deleteModal.hide();
+                        if (modalBackdrop) {
+                            modalBackdrop.remove();
+                        }
                     })
                 })
             })
@@ -144,11 +176,14 @@
 
     frmSearch.onsubmit = (e) => {
         e.preventDefault();
-    
+        
         let formData = new FormData();
         formData.append('search', inputSearch.value);
     
-        axios.post('/api/search.php', formData)
+        if(inputSearch.value == ''){
+            fetchData();
+        }else{
+            axios.post('/api/search.php', formData)
             .then((resSearch) => {
                 const results = resSearch.data.products;
                 tbProduct.innerHTML = ''; 
@@ -192,22 +227,8 @@
                 console.error('Search failed:', error);
                 tbProduct.innerHTML = '<tr><td colspan="6" class="text-center">Search failed. Please try again.</td></tr>';
             });
+        }
     };
-
-    
-
-
-    // const row = document.getElementsByTagName('tr');
-    // const clickEdit = document.querySelectorAll('.btn-edit');
-
-    // tbProduct.forEach((item) => {
-    //     clickEdit.addEventListener('click',() => {
-    //         row.forEach( i => {
-    //             i.style.backgroundColor = '';
-    //         })
-    //         row.style.backgroundColor = 'lightblue';
-    //     })    
-    // });
 
 
 })();

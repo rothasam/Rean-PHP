@@ -18,6 +18,7 @@ th, td{
 table{
     background-color: rgba(255, 255, 255, 0.656)!important;
     border-radius: 5px!important;
+    overflow: hidden!important;;
 }
 tbody tr:hover{
     background-color:rgb(196, 196, 196)!important;
@@ -57,8 +58,9 @@ tbody tr:hover{
     top: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
     flex-direction: column;
+    padding: 0 80px;
 }
 #btn-submit{
     /* background-color: #3A6DC4!important; */
@@ -77,7 +79,18 @@ tbody tr:hover{
 }
 
 .toast-container{
-    position: sticky;
+    position: absolute!important;
     top: 20px!important;
     left: 20px!important;
+}
+#showPrice td{
+    text-align: end!important;
+    font-size: 26px;
+    font-weight: 600;
+}
+#showPrice{
+    background-color: white!important;
+}
+#showPrice:hover{
+    background-color: white!important;
 }

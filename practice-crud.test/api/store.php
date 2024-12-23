@@ -3,11 +3,13 @@
     header('Content-Type: application/json'); // sets the Content-Type header of the HTTP response to application/json.
                                             // By default, PHP sends the response with the Content-Type: text/html header, which is suitable for HTML pages but not for JSON responses.
                                         
-    // get data from input                               
-    $name = strval($_POST['name']);
-    $brand = strval($_POST['brand']);
-    $price = floatval($_POST['price']);
-    $stock = intval($_POST['stock']);
+    // get data from input  
+    if(isset($_POST['name']) && $_POST['brand'] && $_POST['price'] && $_POST['stock']){
+        $name = strval($_POST['name']);
+        $brand = strval($_POST['brand']);
+        $price = floatval($_POST['price']);
+        $stock = intval($_POST['stock']);
+    }                             
 
     $image = null;
     $fileImgName = '';
@@ -59,7 +61,7 @@
 
     }
 
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newProduct = [
         'id' => $id,
         'name' => $name,
@@ -71,13 +73,13 @@
 
     array_push($products,$newProduct); // append new data to associativee array
     file_put_contents($pathToProductFile, json_encode($products),JSON_PRETTY_PRINT); // convert associative array to json and put new contnt to json file
-// }
+}
 
 
 
     echo json_encode([
         'result' => true,
-        'msg' => 'save hz'
+        'msg' => 'ot error te'
     ]);
 
     

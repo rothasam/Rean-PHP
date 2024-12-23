@@ -2,11 +2,14 @@
 
 header('Content-Type: application/json');
 
-$seletedID = intval($_POST['id']);
-$proName = strval($_POST['name']);
-$brandName = strval($_POST['brand']);
-$price = floatval($_POST['price']);
-$stockQty = intval($_POST['stock']);
+$seletedID = $proName = $brandName = $price = $stockQty = '';
+if(isset($_POST['name']) && $_POST['brand'] && $_POST['price'] && $_POST['stock'] ){
+    $seletedID = intval($_POST['id']);
+    $proName = strval($_POST['name']);
+    $brandName = strval($_POST['brand']);
+    $price = floatval($_POST['price']);
+    $stockQty = intval($_POST['stock']);
+}
 $pathToProductFile = '../storage/data/products.json';
 
 $image = null;

@@ -2,7 +2,10 @@
 
 header('Content-Type: application/json');
 
-$seletedID = $_GET['id'];
+$seletedID = '';
+if(isset($_GET['id'])){
+    $seletedID = $_GET['id'];
+}
 $pathToProductFile = '../storage/data/products.json';
 $products = json_decode(file_get_contents($pathToProductFile),true);
 
