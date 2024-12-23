@@ -14,9 +14,20 @@
     <main>
         <img src="assets/img/bg.png" alt="" class="bg-img">
         <div class="container-fluid px-5">
-            <div class="row gx-5">
+            <div class="row ">
+                
 
-                <div class="col-3">
+                <div class="col-4">
+                    <div class="toast-container">
+                        <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body text-white" id="toastBody">
+                                <!-- Hello, world! This is a toast message. -->
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-container">
                         <h4 class="text-center fw-bold mb-4" id="title-action">Add New Product</h4>
                         <form method="POST" id="frmInfo">
@@ -39,15 +50,14 @@
                             <div class="mb-3">
                                 <!-- <label for="image" class="form-label">Image</label> -->
                                 <input type="file" class="form-control" id="image" name="image" placeholder="choose image">
-                                <!-- <div id="imagePreview" class="mt-3">
-                                    <img id="previewImg" src="" alt="Image Preview">
-                                </div> -->
                             </div>
-                            <button type="submit" class="btn w-100" id="btn-submit">Add Product</button>
+                            <button type="submit" class="btn w-100 mt-3" id="btn-submit">Add Product</button>
                         </form>
+
                     </div>
+                    
                 </div>
-                <div class="col-9">
+                <div class="col-8">
                 <h1 class="text-center my-5 fw-bold">Product Inventory Management</h1>
                     <div class="results-table">
                     <div class="d-flex justify-content-between mb-3 align-items-center">

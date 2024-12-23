@@ -14,26 +14,15 @@
     btnSubmit.style.backgroundColor = '#3A6DC4';
 
     let productID = 0;
-
-    // document.getElementById('image').addEventListener('change', function (event) {
-    //     const file = event.target.files[0]; // Get the selected file
     
-    //     if (file) {
-    //         const reader = new FileReader(); // Create a FileReader to read the file
-    //         reader.onload = function (e) {
-    //             const previewImg = document.getElementById('previewImg');
-    //             previewImg.src = e.target.result; // Set the image source to the file's data URL
-    //             previewImg.style.display = 'block'; // Show the image preview
-    //         };
-    //         reader.readAsDataURL(file); // Read the file as a data URL
-    //     } else {
-    //         // If no file is selected, hide the preview image
-    //         const previewImg = document.getElementById('previewImg');
-    //         previewImg.src = '';
-    //         // previewImg.style.display = 'none';
-    //     }
-    // });
-    
+    const showToast = (message,classColor) => {
+        const toastMsg = document.getElementById('toastBody');
+        const toastLive = document.getElementById('liveToast')
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive);
+        toastMsg.innerHTML = message;
+        toastLive.classList.add(classColor);
+        toastBootstrap.show()
+    }
 
 
     const fetchData = () => {
@@ -66,7 +55,6 @@
                 })
                 // <button data-id-view='${pro.id}' class="btn btn-success btn-view"><i class="fa-solid fa-eye"></i></button>
 
-
                 document.querySelectorAll('.btn-edit').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         titleAction.innerHTML = 'Edit Product';
@@ -88,8 +76,10 @@
                     btn.addEventListener('click', (e) => {
                         const seletedID = btn.getAttribute('data-id-delete');
                         // console.log(seletedID);
-                        axios.get(`/api/destroy.php?id=${seletedID}`).then( redDelete =>{
-                            console.log(redDelete);
+                        axios.get(`/api/destroy.php?id=${seletedID}`)
+                        .then( redDelete =>{
+                            // console.log(redDelete);
+                            showToast('Delete Product Successful','bg-danger');
                             fetchData();
                         })
                     })
@@ -122,18 +112,21 @@
 
         if(productID == 0){
             axios.post('/api/store.php', formData)
-           .then((res) => {
+            .then((res) => {
                 // console.log(res.data);
+                showToast('Add Product Successful','bg-success');
                 proName.value = brandName.value = price.value = stockQty.value = image.value = '';
                 proName.focus();
                 fetchData();
                 
-            });
+            })
+            .catch(error => console.error('Error:', error));
         } else {  // edit
             
             axios.post('/api/update.php', formData)
             .then((resUpdate) => {
                 // console.log(resUpdate);
+                showToast('Update Product Successful','bg-success');
                 titleAction.innerHTML = 'Add New Product';
                 btnSubmit.innerHTML = 'Add Product';
                 btnSubmit.style.backgroundColor = '#3A6DC4';
@@ -158,7 +151,7 @@
         axios.post('/api/search.php', formData)
             .then((resSearch) => {
                 const results = resSearch.data.products;
-                tbProduct.innerHTML = ''; // Clear the table body
+                tbProduct.innerHTML = ''; 
     
                 if (results.length > 0) {
                     results.forEach((product) => {
@@ -181,7 +174,8 @@
                             </tr>
                         `;
                     });
-                } else {
+                } 
+                else {
                     tbProduct.innerHTML = `
                     <tr class="proNotFound">
                     	<td colspan="6" class="text-center">
