@@ -75,6 +75,25 @@
 
 // MATH 
 
+// echo pow(2,3); // 8
+// echo sqrt(9); // 3
+// echo pow(16,1/4); // 2
+
+// $num = 12.5;
+// echo round($num);
+$num1 = 12.456;
+$num2 = -12.77;
+// echo round($num1,1); //12.5
+// echo round($num1,2); // 12.46
+// echo ceil($num1); // 13
+// echo floor($num1); // 12
+
+// echo abs($num2);  // convert to positive
+// echo pi(); // 3.1415926535898
+
+ 
+
+
 
 
 
