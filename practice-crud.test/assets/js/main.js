@@ -8,9 +8,10 @@
     const image = document.getElementById('image');
     let tbProduct = document.getElementById('tbody');
     // const labelName = document.getElementById('labelName');
-    // const searchBar = document.getElementById('searchBar');
     const titleAction = document.getElementById('title-action');
     const btnSubmit = document.getElementById('btn-submit');
+    const inputSearch = document.getElementById('inputSearch');
+    const frmSearch = document.getElementById('frmSearch');
 
     let productID = 0;
 
@@ -144,6 +145,36 @@
 
         
     }
+
+
+    frmSearch.onsubmit = (e) => {
+        e.preventDefault();
+
+        let frmData = new FormData();
+        frmData.append('search', inputSearch.value);
+        axios.post('/api/search.php', frmData)
+        .then((resSearch) => {
+            console.log(resSearch);
+        })
+    }
+
+
+    // const row = document.getElementsByTagName('tr');
+    // const clickEdit = document.querySelectorAll('.btn-edit');
+
+    // tbProduct.forEach((item) => {
+    //     clickEdit.addEventListener('click',() => {
+    //         row.forEach( i => {
+    //             i.style.backgroundColor = '';
+    //         })
+    //         row.style.backgroundColor = 'lightblue';
+    //     })    
+    // });
+
+
+
+
+    
 
 })();
 

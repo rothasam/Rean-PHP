@@ -37,7 +37,7 @@ main{
     position: relative;
     width: 30%;
 }
-.search-box span{
+.search-box button{
     position: absolute;
     top: 0;
     right: 0;
@@ -63,8 +63,13 @@ tbody tr:hover{
     background-color: red;
 }
 .form-container{
+    height: 100vh;
     position: sticky;
-    top: 60px;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 /* button{
     background-image: linear-gradient(to top, #00c6fb 0%, #005bea 100%);

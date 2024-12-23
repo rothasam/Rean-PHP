@@ -14,7 +14,7 @@
     <main>
         <div class="container-fluid px-5">
             <div class="row gx-5">
-                <h1 class="text-center my-5 fw-bold">Product Inventory Management</h1>
+
                 <div class="col-3">
                     <div class="form-container">
                         <h4 class="text-center fw-bold mb-4" id="title-action">Add New Product</h4>
@@ -38,24 +38,25 @@
                             <div class="mb-3">
                                 <!-- <label for="image" class="form-label">Image</label> -->
                                 <input type="file" class="form-control" id="image" name="image" placeholder="choose image">
-                                <div id="imagePreview" class="mt-3">
+                                <!-- <div id="imagePreview" class="mt-3">
                                     <img id="previewImg" src="" alt="Image Preview">
-                                </div>
+                                </div> -->
                             </div>
                             <button type="submit" class="btn btn-primary" id="btn-submit">Add Product</button>
                         </form>
                     </div>
                 </div>
                 <div class="col-9">
+                <h1 class="text-center my-5 fw-bold">Product Inventory Management</h1>
                     <div class="results-table">
                     <div class="d-flex justify-content-between mb-3 align-items-center">
                         <h5>Product List</h5>
-                        <div class="search-box">
-                            <input type="text" class="form-control" id="searchBar" placeholder="Search by product name">
-                            <span class="input-group-text">
+                        <form class="search-box" id="frmSearch">
+                            <input type="text" class="form-control" id="inputSearch" placeholder="Search by product name">
+                            <button type="submit" class="input-group-text">
                                 <i class="fa-solid fa-magnifying-glass "></i>
-                            </span>
-                        </div>
+                            </button>
+                        </form>
                     </div>
                     <table class="table table-striped-columns">
                         <thead>
