@@ -68,6 +68,7 @@ class Student
                 'result' => false,
                 'message' => 'File data not found.'
             ]);
+            exit();
         }
         
         $arr = json_decode(file_get_contents(self::FILE_DATA),true);
