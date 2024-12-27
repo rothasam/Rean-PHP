@@ -51,13 +51,19 @@ class Student
         $arr = [];
         if(file_exists(self::FILE_DATA)){
             $arr = json_decode(file_get_contents(self::FILE_DATA),true);
+            return json_encode([
+                'result' => true,
+                'message' => 'Get all student successfully',
+                'data' => $arr
+            ]);
+        }else{
+            return json_encode([
+                'result' => false,
+                'message' => 'Get data failed!! File does not exist.'
+            ]);
         }
 
-        return json_encode([
-            'result' => true,
-            'message' => 'Get all student successfully',
-            'data' => $arr
-        ]);
+        
     }
 
 
@@ -69,30 +75,41 @@ class Student
                 'message' => 'File data not found.'
             ]);
             exit();
-        }
-        
-        $arr = json_decode(file_get_contents(self::FILE_DATA),true);
-        
-        foreach($arr as $index => $item){
-            if($item['id'] == $this->id){
-                if($item['photo'] && file_exists(self::DIR_PHOTO . $item['photo'])){
-                    unlink(self::DIR_PHOTO . $item['photo']);
-                }
-                array_splice($arr,$index,1);
-                break;
-            }
-        }
-
-        if(count($arr) == 0){
-            unlink(self::FILE_DATA);
         }else{
-            file_put_contents(self::FILE_DATA, json_encode($arr));
-        }
+            $found = 0;
+            $arr = json_decode(file_get_contents(self::FILE_DATA),true);
+        
+            foreach($arr as $index => $item){
+                if($item['id'] == $this->id){
+                    if($item['photo'] && file_exists(self::DIR_PHOTO . $item['photo'])){
+                        unlink(self::DIR_PHOTO . $item['photo']);
+                    }
+                    array_splice($arr,$index,1);
+                    $found = 1;
+                    break;
+                }
+            }
+            if($found == 0){
+                return json_encode([
+                    'result' => false,
+                    'message' => 'id = ' . $this->id . ' is not found!!'
+                ]);
+                exit();
+            }
 
-        return json_encode([
-            'result' => true,
-            'message' => 'Data delete successfully'
-        ]);
+            if(count($arr) == 0){
+                unlink(self::FILE_DATA);
+            }else{
+                file_put_contents(self::FILE_DATA, json_encode($arr));
+            }
+
+            return json_encode([
+                'result' => true,
+                'message' => 'Data delete successfully'
+            ]);
+        }
+        
+        
     }
 
 
@@ -102,52 +119,64 @@ class Student
                 'result' => false,
                 'message' => 'File data not found.'
             ]);
-        }
+        }else{
+            $found = 0;
+            $arr = json_decode(file_get_contents(self::FILE_DATA),true);
+            $fileName = null;
 
-        $arr = json_decode(file_get_contents(self::FILE_DATA),true);
-        $fileName = null;
-        if($this->file){
-            $path = pathinfo($this->file['name']);
-            $fileName = uniqid(). '.'. $path['extension'];
-            copy($this->file['tmp_name'],self::DIR_PHOTO. $fileName);
-            $this->photo = $fileName;
-        }
-
-        foreach($arr as $index => $item){
-            
-            if($item['id'] == $this->id){
-                $arr[$index]['name'] = $this->name;
-                $arr[$index]['gender'] = $this->gender;
-                $arr[$index]['phone'] = $this->phone;
-                // why at this line we dont use item['name'] instead of $arr[$index]['name'] ?
-                // because $item is a reference to the array item, so if we change $item[' 
-                // name'] it will change the original array item, but if we change $arr[$index
-                // ]['name'] it will change the array item at the index $index in the array
-
-                // still dont understand ?
-                // it seems that we are not changing the original array but creating a new array with the changes
-                // so when we want to get the data we read from the file, we still get the original data, not the updated one.
-                // but when we want to save the updated data back to the file, we do that.
-
-                if($this->file){
-                    if($item['photo'] && file_exists(self::DIR_PHOTO . $item['photo'])){
-                        unlink(self::DIR_PHOTO. $fileName);
-                    }
-                    $arr[$index]['photo'] = $fileName;
-                }else{
-                    $arr[$index]['photo'] = $item['photo'];
-                }
-                $stu = $arr[$index];
-                break;
-
+            if($this->file){
+                $path = pathinfo($this->file['name']);
+                $fileName = uniqid(). '.'. $path['extension'];
+                copy($this->file['tmp_name'],self::DIR_PHOTO. $fileName);
+                $this->photo = $fileName;
             }
-        }
-        file_put_contents(self::FILE_DATA,json_encode($arr));
 
-        return json_encode([
-            'result' => true,
-            'message' => 'Data update successfully',
-            'data' => $stu
-        ]);
+            foreach($arr as $index => $item){
+                
+                if($item['id'] == $this->id){
+                    $arr[$index]['name'] = $this->name;
+                    $arr[$index]['gender'] = $this->gender;
+                    $arr[$index]['phone'] = $this->phone;
+                    // why at this line we dont use item['name'] instead of $arr[$index]['name'] ?
+                    // because $item is a reference to the array item, so if we change $item[' 
+                    // name'] it will change the original array item, but if we change $arr[$index
+                    // ]['name'] it will change the array item at the index $index in the array
+
+                    // still dont understand ?
+                    // it seems that we are not changing the original array but creating a new array with the changes
+                    // so when we want to get the data we read from the file, we still get the original data, not the updated one.
+                    // but when we want to save the updated data back to the file, we do that.
+
+                    if($this->file){
+                        if($item['photo'] && file_exists(self::DIR_PHOTO . $item['photo'])){
+                            unlink(self::DIR_PHOTO. $item['photo']);
+                        }
+                        $arr[$index]['photo'] = $fileName;
+                    }else{
+                        $arr[$index]['photo'] = $item['photo'];
+                    }
+                    $stu = $arr[$index];
+                    $found = 1;
+                    break;
+
+                }
+            }
+            if($found == 0){
+                return json_encode([
+                    'result' => false,
+                    'message' => 'Update failed!!! ID: ' . $this->id . ' not found.'
+                ]);
+                exit();
+            }
+            file_put_contents(self::FILE_DATA,json_encode($arr));
+
+            return json_encode([
+                'result' => true,
+                'message' => 'Data update successfully',
+                'data' => $stu
+            ]);
+        }
+
+        
     }
 }

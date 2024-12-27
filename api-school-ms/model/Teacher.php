@@ -7,6 +7,7 @@ class Teacher
     public const FILE_DATA = '../../storage/data/teacher.json';
     public const DIR_PHOTO = '../../storage/photo/';
 
+
     public function store()
     {
         $arrKru = [];
@@ -19,6 +20,7 @@ class Teacher
         }
 
         if($this->file != null){
+
             $path = pathinfo($this->file['name']);
             $fileName = uniqid() . '.' . $path['extension'];
             copy($this->file['tmp_name'],self::DIR_PHOTO . $fileName);
@@ -51,13 +53,18 @@ class Teacher
         $arrKru = [];
         if(file_exists(self::FILE_DATA)){
             $arrKru = json_decode(file_get_contents(self::FILE_DATA),true);
+            return json_encode([
+                'result' => true,
+                'message' => 'Get all teacher successfully',
+                'data' => $arrKru
+            ]);
+        }else{
+            return json_encode([
+                'result' => false,
+                'message' => 'Get data failed!! File does not exist.'
+            ]);
         }
 
-        return json_encode([
-            'result' => true,
-            'message' => 'Get all teacher successfully',
-            'data' => $arrKru
-        ]);
     }
 
 
@@ -66,33 +73,43 @@ class Teacher
         if(!file_exists(self::FILE_DATA)){
             return json_encode([
                 'result' => false,
-                'message' => 'File data not found.'
+                'message' => 'File data not found!!'
             ]);
             exit();
-        }
+        }else{
+            $found = 0;  
+            $arrKru = json_decode(file_get_contents(self::FILE_DATA),true);
 
-        $arrKru = json_decode(file_get_contents(self::FILE_DATA),true);
-
-        foreach($arrKru as $index => $item){
-            if($item['id'] == $this->id){
-                if($item['photo'] && file_exists(self::DIR_PHOTO . $item['photo'])){
-                    unlink(self::DIR_PHOTO . $item['photo']);
+            foreach($arrKru as $index => $item){
+                if($item['id'] == $this->id){
+                    if($item['photo'] && file_exists(self::DIR_PHOTO . $item['photo'])){
+                        unlink(self::DIR_PHOTO . $item['photo']);
+                    }
+                    array_splice($arrKru,$index,1);
+                    $found = 1;
+                    break;
                 }
-                array_splice($arrKru,$index,1);
-                break;
             }
+            if($found == 0){
+                return json_encode([
+                    'result' => false,
+                    'message' => 'id = ' . $this->id . ' is not found!!'
+                ]);
+                exit();
+            }
+
+            if(count($arrKru) == 0){  // after delete the last data in file => empty => delete the file
+                unlink(self::FILE_DATA);
+            } else{
+                file_put_contents(self::FILE_DATA, json_encode($arrKru));
+            }
+
+            return json_encode([
+                'result' => true,
+                'message' => 'Data deleted successfully'
+            ]);
         }
 
-        if(count($arrKru) == 0){
-            unlink(self::FILE_DATA);
-        } else{
-            file_put_contents(self::FILE_DATA, json_encode($arrKru));
-        }
-
-        return json_encode([
-            'result' => true,
-            'message' => 'Data deleted successfully'
-        ]);
     }
 
 
@@ -104,43 +121,56 @@ class Teacher
                 'message' => 'File data not found.'
             ]);
             exit();
-        }
-        
-        $arrKru = json_decode(file_get_contents(self::FILE_DATA),true);
-        $fileName = null;
+        }else{
+            $edited = '';
+            $found = 0;
+            $fileName = null;
 
-        if($this->file != null){
-            $path = pathinfo($this->file['name']);
-            $fileName = uniqid(). '.'. $path['extension'];
-            copy($this->file['tmp_name'],self::DIR_PHOTO. $fileName);
-            $this->photo = $fileName;
-        }
+            $arrKru = json_decode(file_get_contents(self::FILE_DATA),true);
 
-        foreach($arrKru as $index => $item){
-            if($item['id'] == $this->id){
-                $arrKru[$index]['name'] = $this->name;
-                $arrKru[$index]['gender'] = $this->gender;
-                $arrKru[$index]['email'] = $this->email;
-                $arrKru[$index]['salary'] = $this->salary;
-                if($this->file){
-                    if($item['photo'] && file_exists(self::DIR_PHOTO. $item['photo'])){
-                        unlink(self::DIR_PHOTO. $item['photo']);
-                    }
-                    $arrKru[$index]['photo'] = $fileName;
-                }else{
-                    $arrKru[$index]['photo'] = $item['photo'];
-                }
-                $edited = $arrKru[$index];
-                break;
+            if($this->file != null){
+                $path = pathinfo($this->file['name']);
+                $fileName = uniqid(). '.'. $path['extension'];
+                copy($this->file['tmp_name'],self::DIR_PHOTO. $fileName);
+                $this->photo = $fileName;
             }
-        }
-        file_put_contents(self::FILE_DATA,json_encode($arrKru));
 
-        return json_encode([
-            'result' => true,
-            'message' => 'Data updated successfully',
-            'data' => $edited
-        ]);
+            foreach($arrKru as $index => $item){
+                if($item['id'] == $this->id){
+                    $arrKru[$index]['name'] = $this->name;
+                    $arrKru[$index]['gender'] = $this->gender;
+                    $arrKru[$index]['email'] = $this->email;
+                    $arrKru[$index]['salary'] = $this->salary;
+                    if($this->file){
+                        if($item['photo'] && file_exists(self::DIR_PHOTO. $item['photo'])){
+                            unlink(self::DIR_PHOTO. $item['photo']);
+                        }
+                        $arrKru[$index]['photo'] = $fileName;  // set new photo 
+                    }else{
+                        $arrKru[$index]['photo'] = $item['photo'];
+                    }
+                    $edited = $arrKru[$index];
+                    $found = 1;
+                    break;
+                }
+            }
+            if($found == 0){
+                return json_encode([
+                    'result' => false,
+                    'message' => 'Update failed!!! ID: ' . $this->id . ' not found.'
+                ]);
+                exit();
+            }
+            
+            file_put_contents(self::FILE_DATA,json_encode($arrKru));
+
+            return json_encode([
+                'result' => true,
+                'message' => 'Data updated successfully',
+                'data' => $edited
+            ]);
+        }
+    
     }
 
 }
