@@ -1,1 +1,1 @@
-<p align="left"> <img src="https://komarev.com/ghpvc/?username=rothasam&label=%20visitor&color=F13C2F&style=flat" alt="rothasam" /> </p>
+![View Counter](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/rothasam/Rean-PHP&title=Visitor)
