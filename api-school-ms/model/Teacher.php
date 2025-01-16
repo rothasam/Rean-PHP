@@ -5,7 +5,7 @@ class Teacher
     public $id, $name, $gender, $email, $salary, $photo;
     public $file = null;
     public const FILE_DATA = '../../storage/data/teacher.json';
-    public const DIR_PHOTO = '../../storage/photo/';
+    public const DIR_PHOTO = '../../storage/photo/teachers/';
 
 
     public function store()
