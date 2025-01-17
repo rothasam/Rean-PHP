@@ -13,7 +13,7 @@ $teacher->email = trim(strval($_POST['email']));
 $teacher->salary = trim(floatval($_POST['salary']));
 $teacher->file = $_FILES['photo'] ?? null;
 
-echo $teacher->store();
+echo $teacher->update();
 
 // if($teacher->file = $_FILES['photo'] ?? null){
 //     if($teacher->file['size'] > 5 * 1024 * 1024){  // 5MB

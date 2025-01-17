@@ -122,11 +122,11 @@ class Teacher
             ]);
             exit();
         }else{
-            $edited = '';
+            // $edited = '';
             $found = 0;
+            $arrKru = json_decode(file_get_contents(self::FILE_DATA),true);
             $fileName = null;
 
-            $arrKru = json_decode(file_get_contents(self::FILE_DATA),true);
 
             if($this->file != null){
                 $path = pathinfo($this->file['name']);
