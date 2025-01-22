@@ -80,13 +80,13 @@ class Customer
             $found = 0;  
             $arrCustomer = json_decode(file_get_contents(self::FILE_DATA),true);
 
-            foreach($arrCustomer as $index => $item)
+            foreach($arrCustomer as $index => $customer)
             {
-                if($item['id'] == $this->id)
+                if($customer['id'] == $this->id)
                 {
-                    if($item['photo'] && file_exists(self::DIR_PHOTO . $item['photo'])) // check if file name exists in both object and in folder photo
+                    if($customer['photo'] && file_exists(self::DIR_PHOTO . $customer['photo'])) // check if file name exists in both object and in folder photo
                     {
-                        unlink(self::DIR_PHOTO. $item['photo']);
+                        unlink(self::DIR_PHOTO. $customer['photo']);
                     }
                     array_splice($arrCustomer,$index,1);
                     $found = 1;
@@ -118,20 +118,70 @@ class Customer
 
 
 
-    // public function update()
-    // {
-    //     if(file_exists(self::FILE_DATA))
-    //     {
-    //         return json_encode([
-    //             'result' => false,
-    //             'message' => 'File data not found!!'
-    //         ]);
-    //         exit();
-    //     }
-    //     else{
+    public function update()
+    {
+        if(!file_exists(self::FILE_DATA))
+        {
+            return json_encode([
+                'result' => false,
+                'message' => 'File data not found!!'
+            ]);
+            exit();
+        }
+        else{
+            $found = 0;
+            $arrCustomer = json_decode(file_get_contents(self::FILE_DATA),true);
+            $fileName = null;
 
-    //     }
-    // }
+            if($this->filePhoto){
+                $path = pathinfo($this->filePhoto['name']);
+                $fileName = uniqid(). '.'. (strlen($path['extension']) > 0? $path['extension'] : 'jpg');
+                copy($this->filePhoto['tmp_name'], self::DIR_PHOTO . $fileName);
+                $this->photo = $fileName;
+            }
+
+            foreach($arrCustomer as $index => $customer)
+            {
+                if($customer['id'] == $this->id)
+                {
+                    $arrCustomer[$index]['firstName'] = $this->firstName;
+                    $arrCustomer[$index]['lastName'] = $this->lastName;
+                    $arrCustomer[$index]['gender'] = $this->gender;
+                    $arrCustomer[$index]['branch'] = $this->branch;
+                    $arrCustomer[$index]['email'] = $this->email;
+                    if($this->filePhoto){
+                        if($customer['photo'] && file_exists(self::DIR_PHOTO . $customer['photo'])){
+                            unlink(self::DIR_PHOTO. $customer['photo']);
+                        }
+                        $arrCustomer[$index]['photo'] = $fileName; // dak rub tmey
+
+                    }else{
+                        $arrCustomer[$index]['photo'] = $customer['photi'];
+                    }
+                    $updated = $arrCustomer[$index];
+                    $found = 1;
+                    break;
+                }
+            }
+
+            if($found == 0)
+            {
+                return json_encode([
+                    'result' => false,
+                   'message' => 'Customer id = '. $this->id.'is not found!!'
+                ]);
+                exit();
+            }
+
+            file_put_contents(self::FILE_DATA, json_encode($arrCustomer));
+
+            return json_encode([
+                'result' => true,
+                'message' => 'Data updated successfully',
+                'data' => $updated
+            ]);
+        }
+    }
     
 
 
