@@ -26,6 +26,8 @@ class Customer
 
         $this->photo = $fileName;
 
+
+
         $newCustomer = [
             'id' => $this->id,
             'firstName' => $this->firstName,
@@ -140,6 +142,8 @@ class Customer
                 $this->photo = $fileName;
             }
 
+
+
             foreach($arrCustomer as $index => $customer)
             {
                 if($customer['id'] == $this->id)
@@ -156,8 +160,10 @@ class Customer
                         $arrCustomer[$index]['photo'] = $fileName; // dak rub tmey
 
                     }else{
-                        $arrCustomer[$index]['photo'] = $customer['photi'];
+                        $arrCustomer[$index]['photo'] = $customer['photo'] ?? null; // Keep old photo if no new one is uploaded
                     }
+
+                    
                     $updated = $arrCustomer[$index];
                     $found = 1;
                     break;
@@ -183,7 +189,47 @@ class Customer
         }
     }
     
+    public function getStatistics(){
+        $arrCustomer = [];
+        if(file_exists(self::FILE_DATA)){
+            $arrCustomer = json_decode(file_get_contents(self::FILE_DATA),true);
 
+            // initialize count
+            $statistics = [
+                'branches' => [
+                    'Kandal' => 0,
+                    'Phnom Penh' => 0,
+                    'Prey Veng' => 0
+                ],
+                'gender' => [
+                    'Male' => 0,
+                    'Female' => 0,
+                    'total_customers' => count($arrCustomer),
+                ]
+            ];
+
+            foreach ($arrCustomer as $customer) {
+                if (isset($statistics['branches'][$customer['branch']])) {
+                    $statistics['branches'][$customer['branch']]++;
+                }
+
+                if (isset($statistics['gender'][$customer['gender']])) {
+                    $statistics['gender'][$customer['gender']]++;  // [$customer['gender']] can be Male or Female => $statistics['gender']['Male']++ or $statistics['gender']['Female']++
+                }
+            }
+            return json_encode([
+                'result' => true,
+                'message' => 'Get statistics successfully',
+                'data' => $statistics
+            ]);
+            
+        }else{
+            return json_encode([
+                'result' => false,
+                'message' => 'Get data failed!! File does not exist.'
+            ]);
+        }
+    }
 
 
 }

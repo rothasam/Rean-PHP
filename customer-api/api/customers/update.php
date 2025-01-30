@@ -9,6 +9,7 @@ $customer->id = intval($_GET['id']);
 $customer->firstName = trim(strval($_POST['firstName']));
 $customer->lastName = trim(strval($_POST['lastName']));
 $customer->gender = trim(strval($_POST['gender']));
+$customer->branch = trim(strval($_POST['branch']));
 $customer->email = trim(strval($_POST['email']));
 $customer->filePhoto = $_FILES['photo'] ?? null;
 echo $customer->update();
