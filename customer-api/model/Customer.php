@@ -11,6 +11,8 @@ class Customer
     {
         $arrCustomer = [];
         $this->id = 1;
+
+        
         
         if(file_exists(self::FILE_DATA)){ // check if file exists
             $arrCustomer = json_decode(file_get_contents(self::FILE_DATA),true);
@@ -159,7 +161,8 @@ class Customer
                         }
                         $arrCustomer[$index]['photo'] = $fileName; // dak rub tmey
 
-                    }else{
+                    }
+                    else{
                         $arrCustomer[$index]['photo'] = $customer['photo'] ?? null; // Keep old photo if no new one is uploaded
                     }
 

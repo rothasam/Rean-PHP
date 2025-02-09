@@ -6,6 +6,7 @@ header('Access-Control-Allow-Origin: *');
 
 $customer = new Customer();
 $customer->id = intval($_GET['id']);
+// $customer->removePhoto = boolval($_GET['removePhoto']);
 $customer->firstName = trim(strval($_POST['firstName']));
 $customer->lastName = trim(strval($_POST['lastName']));
 $customer->gender = trim(strval($_POST['gender']));
